@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NMSC 프로토타입 — 국문 메인 2안 · 콘텐츠 접근성 강조형</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="css/proto.css?v=4">
+<link rel="stylesheet" href="css/theme-b.css?v=2">
+<link rel="stylesheet" href="css/proto-linkmark.css?v=3">
+<script src="js/proto.js?v=4" defer></script>
+</head>
+<body data-proto-note="히어로 축소 + 공지 전체 첫 화면 진입 / 바로가기 밴드 분리">
+<div id="site-header"></div>
+
+<main>
+
+  <!-- ============================================================
+       요구① 히어로 : min(45vh, 500px) — 1안 대비 축소
+       · 유틸 46 + 헤더 88 + 히어로 500 = 634px
+       · FHD(1080)에서 공지사항 6건 전체가 스크롤 없이 진입
+       ============================================================ -->
+  <section class="hero" aria-label="위성영상">
+    <div class="hero__stage">
+      <p class="hero__label">
+        <strong>위성영상 히어로 (축소)</strong>
+        <span>1안 620px → 2안 500px · 비율 유지 크롭은 동일</span>
+      </p>
+      <div class="hero__nav">
+        <button type="button" aria-label="이전 영상">‹</button>
+        <button type="button" aria-label="다음 영상">›</button>
+      </div>
+      <div class="hero__dots" aria-hidden="true"><i class="is-on"></i><i></i><i></i><i></i></div>
+      <p class="hero__caption">천리안위성 2A호 · 한반도 · 2026-08-04 14:00 KST</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container newsrow">
+
+      <article class="cardnews">
+        <div class="ph">카드뉴스 이미지 4:3</div>
+        <div class="cardnews__body">
+          <strong>천리안위성 2A호가 관측한 여름철 대류운</strong>
+          <p class="small muted">위성으로 본 한반도 기상 · 2026-08-01</p>
+        </div>
+      </article>
+
+      <div>
+        <div class="section__head">
+          <h2 class="section__title">공지사항</h2>
+          <a class="section__more" href="sub-bbs.html">전체보기 +</a>
+        </div>
+        <ul>
+          <li class="notice__row">
+            <span class="notice__cat">공지</span>
+            <a class="notice__title" href="#" title="국가기상위성센터 누리집 시스템 정기점검에 따른 서비스 일시 중단 안내">국가기상위성센터 누리집 시스템 정기점검에 따른 서비스 일시 중단 안내</a>
+            <span class="notice__date">2026-08-03</span>
+          </li>
+          <li class="notice__row">
+            <span class="notice__cat">공지</span>
+            <a class="notice__title" href="#" title="천리안위성 2A호 산출물 알고리즘 개선 버전 배포 및 적용 일정 안내">천리안위성 2A호 산출물 알고리즘 개선 버전 배포 및 적용 일정 안내</a>
+            <span class="notice__date">2026-07-30</span>
+          </li>
+          <li class="notice__row">
+            <span class="notice__cat">보도</span>
+            <a class="notice__title" href="#" title="폭염 감시 위성자료 시범 서비스 개시">폭염 감시 위성자료 시범 서비스 개시</a>
+            <span class="notice__date">2026-07-28</span>
+          </li>
+          <li class="notice__row">
+            <span class="notice__cat">채용</span>
+            <a class="notice__title" href="#" title="2026년 하반기 국가기상위성센터 기간제근로자 채용 공고">2026년 하반기 국가기상위성센터 기간제근로자 채용 공고</a>
+            <span class="notice__date">2026-07-25</span>
+          </li>
+          <li class="notice__row">
+            <span class="notice__cat">공지</span>
+            <a class="notice__title" href="#" title="위성자료 다운로드 시스템 접속 방식 변경 안내">위성자료 다운로드 시스템 접속 방식 변경 안내</a>
+            <span class="notice__date">2026-07-22</span>
+          </li>
+          <li class="notice__row">
+            <span class="notice__cat">공지</span>
+            <a class="notice__title" href="#" title="북극해빙 면적 자료 갱신 주기 조정 안내">북극해빙 면적 자료 갱신 주기 조정 안내</a>
+            <span class="notice__date">2026-07-18</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       요구② 바로가기 — 강조 밴드 3 + 일반 밴드 8 로 분리
+       · 퀵링크와 동일한 2단 위계를 그리드에도 적용
+       ============================================================ -->
+  <section class="section section--subtle">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">주요 서비스</h2>
+        <span class="section__more">강조 3 · 일반 8 (2단 위계)</span>
+      </div>
+      <div class="shortcut shortcut--lead">
+        <a class="shortcut__item" href="#"><span data-icon="layers"></span>고해상도 영상뷰어</a>
+        <a class="shortcut__item" href="#"><span data-icon="download"></span>위성자료 다운로드</a>
+        <a class="shortcut__item" href="#"><span data-icon="sparkles"></span>특이영상</a>
+      </div>
+      <div class="shortcut shortcut--normal">
+        <a class="shortcut__item" href="#"><span data-icon="snowflake"></span>북극해빙</a>
+        <a class="shortcut__item" href="#"><span data-icon="satellite"></span>천리안위성 2A호 알아보기</a>
+        <a class="shortcut__item" href="sub-static.html"><span data-icon="sun"></span>우주기상</a>
+        <a class="shortcut__item" href="#"><span data-icon="wind"></span>온실가스 분석</a>
+        <a class="shortcut__item" href="#"><span data-icon="thermometer"></span>기후변화감시</a>
+        <a class="shortcut__item" href="#"><span data-icon="video"></span>소개영상</a>
+        <a class="shortcut__item" href="#"><span data-icon="message-circle"></span>소통채널</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-quicklink"></div>
+<div id="site-footer"></div>
+</body></html>

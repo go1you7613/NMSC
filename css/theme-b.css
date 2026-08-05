@@ -1,0 +1,41 @@
+/* ================================================================
+   2안 · 콘텐츠 접근성 강조형
+   - 히어로 축소(min(45vh,500px)) → 카드뉴스/공지 전체가 첫 화면 진입
+   - 바로가기 : 강조 카드 3 + 일반 그리드 8 을 분리 밴드로
+   ================================================================ */
+
+/* 히어로 — 헤더 88 + 유틸 46 + 히어로 500 = 634px
+   FHD(1080) 기준 공지사항 6건 전체가 첫 화면에 진입 (요구① 강화안) */
+.hero__stage{height:min(45vh,500px);}
+
+/* 카드뉴스 + 공지 : 3분할, 공지 확대 */
+.newsrow{display:grid;grid-template-columns:300px 1fr;gap:var(--sp-8);align-items:start;}
+.newsrow .notice__row{min-height:56px;}
+
+/* 바로가기 : 강조 밴드 + 일반 밴드 분리 (요구② · 2단 위계) */
+.shortcut--lead{grid-template-columns:repeat(3,1fr);margin-bottom:var(--sp-6);}
+.shortcut--lead .shortcut__item{min-height:132px;background:var(--c-ink);
+  color:var(--c-on-ink);border-color:var(--c-ink);font-size:var(--fs-18);font-weight:var(--fw-b);}
+.shortcut--lead .shortcut__item .icon{width:34px;height:34px;stroke-width:1.6;}
+.shortcut--lead .shortcut__item:hover{background:#333;}
+.shortcut--normal{grid-template-columns:repeat(4,1fr);}
+.shortcut--normal .shortcut__item{min-height:96px;}
+
+@media (max-width:1180px){
+  .hero__stage{height:min(42vh,400px);}
+  .newsrow{grid-template-columns:260px 1fr;gap:var(--sp-6);}
+  .shortcut--normal{grid-template-columns:repeat(4,1fr);}
+}
+@media (max-width:1024px){
+  .hero__stage{height:min(40vh,340px);}
+  .newsrow{grid-template-columns:1fr;}
+  .shortcut--lead{grid-template-columns:repeat(3,1fr);}
+  .shortcut--lead .shortcut__item{min-height:104px;font-size:var(--fs-15);}
+  .shortcut--normal{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:640px){
+  .hero__stage{height:min(36vh,260px);}
+  .shortcut--lead{grid-template-columns:1fr;}
+  .shortcut--lead .shortcut__item{min-height:72px;flex-direction:row;}
+  .shortcut--normal{grid-template-columns:repeat(2,1fr);}
+}

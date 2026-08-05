@@ -1,0 +1,58 @@
+/* ================================================================
+   프로토타입 링크 표시 규약
+   - 프로토타입 화면이 실제로 있는 링크 : 파란 표시 + ↗
+   - 화면이 없는 링크(href="#") : 점선 밑줄 + 커서 변경 (클릭해도 이동 없음)
+   - 실서비스에는 포함되지 않는 프로토타입 전용 스타일
+   ================================================================ */
+:root{ --c-link:#1A5FB4; --c-link-bg:#EAF1FB; }
+
+/* 화면이 있는 링크 : js/proto.js 가 .is-live 를 부여 */
+.is-live{color:var(--c-link) !important;}
+.is-live::after{content:" ↗";font-size:.85em;color:var(--c-link);}
+.is-live:hover{text-decoration:underline;}
+
+/* 박스형 요소(카드·타일·퀵링크)는 테두리로 표시 */
+.idx-card.is-live,
+.megaitem.is-live,
+.shortcut__item.is-live,
+.quicklink__item.is-live,
+.tab2__item.is-live,
+.lnb a.is-live{border-color:var(--c-link) !important;}
+.idx-card.is-live::after,
+.megaitem.is-live::after,
+.shortcut__item.is-live::after,
+.quicklink__item.is-live::after,
+.tab2__item.is-live::after,
+.lnb a.is-live::after{content:none;}
+/* 활성 탭(is-current)은 이미 반전 배경(파랑)으로 표시되므로, 프로토 링크 파란 텍스트가
+   배경과 겹쳐 사라지지 않도록 흰 글자를 유지한다 */
+.tab2__item.is-current.is-live{border-color:var(--c-accent) !important;color:var(--c-on-ink) !important;}
+.megaitem.is-live{background:var(--c-link-bg);}
+.idx-card.is-live .idx-go{color:var(--c-link);}
+
+/* 반전 타일(강조 퀵링크·바로가기)은 테두리 대신 좌측 마커 */
+.quicklink__item--lead.is-live,
+.shortcut__item--lead.is-live{position:relative;}
+.quicklink__item--lead.is-live::before,
+.shortcut__item--lead.is-live::before{content:"";position:absolute;left:0;top:0;bottom:0;
+  width:4px;border-radius:4px 0 0 4px;background:var(--c-link);}
+
+/* 화면이 없는 링크 */
+.is-dead{color:var(--c-muted) !important;cursor:default;}
+.is-dead:hover{text-decoration:none;}
+.megaitem.is-dead,.shortcut__item.is-dead,.quicklink__item.is-dead{opacity:.85;}
+
+/* 프로토바 화면 이동 네비 */
+.proto-bar__nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.proto-bar__nav a{color:#C9C9C9;border:1px solid #4A4A4A;border-radius:var(--r-sm);
+  padding:3px 10px;font-size:var(--fs-12);}
+.proto-bar__nav a:hover{background:#333;color:#FFF;}
+.proto-bar__nav a[aria-current="page"]{background:#EDEDED;color:var(--c-ink);
+  border-color:#EDEDED;font-weight:var(--fw-b);}
+
+/* 범례 */
+.linkmark-legend{display:flex;gap:var(--sp-5);flex-wrap:wrap;align-items:center;
+  font-size:var(--fs-13);color:var(--c-muted);
+  border:1px dashed var(--c-border-strong);border-radius:var(--r-md);
+  padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-6);}
+.linkmark-legend b{color:var(--c-link);}

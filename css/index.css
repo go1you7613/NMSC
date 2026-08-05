@@ -1,0 +1,33 @@
+/* 화면 인덱스 전용 스타일 */
+.idx{padding:var(--sp-12) 0 var(--sp-16);}
+.idx-head{border-bottom:1px solid var(--c-border);padding-bottom:var(--sp-8);margin-bottom:var(--sp-10);}
+.idx-eyebrow{font-size:var(--fs-13);letter-spacing:.12em;color:var(--c-muted);margin:0 0 var(--sp-2);}
+.idx-head h1{font-size:var(--fs-32);margin-bottom:var(--sp-4);}
+.idx-lead{margin:0 0 var(--sp-5);color:var(--c-text);}
+.idx-meta{display:flex;gap:var(--sp-6);flex-wrap:wrap;font-size:var(--fs-14);color:var(--c-muted);}
+.idx-meta b{color:var(--c-heading);margin-right:6px;}
+
+.idx-sec{margin-bottom:var(--sp-12);}
+.idx-sec__head{margin-bottom:var(--sp-5);}
+.idx-sec__head h2{font-size:var(--fs-24);margin-bottom:6px;}
+.idx-sec__head p{margin:0;font-size:var(--fs-15);color:var(--c-muted);}
+.idx-grid{display:grid;gap:var(--sp-4);}
+.idx-grid--2{grid-template-columns:repeat(2,1fr);}
+.idx-grid--3{grid-template-columns:repeat(3,1fr);}
+.idx-card{display:block;border:1px solid var(--c-border);border-radius:var(--r-lg);
+  padding:var(--sp-6);background:var(--c-bg);}
+.idx-card:hover{border-color:var(--c-ink);box-shadow:var(--sh-md);}
+.idx-tag{display:inline-block;font-size:var(--fs-12);border:1px solid var(--c-border-strong);
+  border-radius:var(--r-full);padding:2px 10px;color:var(--c-muted);margin-bottom:var(--sp-3);}
+.idx-card strong{display:block;font-size:var(--fs-20);color:var(--c-heading);margin-bottom:var(--sp-2);}
+.idx-card p{margin:0 0 var(--sp-4);font-size:var(--fs-14);color:var(--c-text);}
+.idx-go{font-size:var(--fs-14);font-weight:var(--fw-m);color:var(--c-ink);}
+
+.idx-table{width:100%;border-collapse:collapse;font-size:var(--fs-14);}
+.idx-table th,.idx-table td{border:1px solid var(--c-border);padding:10px 12px;text-align:left;vertical-align:top;}
+.idx-table th{background:var(--c-bg-subtle);font-weight:var(--fw-m);color:var(--c-heading);white-space:nowrap;}
+.idx-flag{font-size:var(--fs-12);border:1px solid var(--c-border-strong);border-radius:var(--r-sm);
+  padding:1px 8px;color:var(--c-muted);vertical-align:middle;margin-left:var(--sp-2);}
+
+@media (max-width:1024px){ .idx-grid--2,.idx-grid--3{grid-template-columns:1fr;} }
+@media (max-width:640px){ .idx-head h1{font-size:var(--fs-24);} }

@@ -1,0 +1,422 @@
+/* ================================================================
+   국가기상위성센터 누리집 개선 — 프로토타입 공통 스타일
+   - 무채색(그레이스케일) : 구조·구성만 검토, 톤&매너는 DSN-01 시안에서 별도
+   - 위계는 명도·굵기·보더·간격으로만 표현
+   - 근거 : 03_메인페이지_개선요구사항_분석.md
+   ================================================================ */
+:root{
+  --c-ink:#1A1A1A; --c-heading:#222; --c-text:#4E4E4E; --c-muted:#767676;
+  --c-disabled:#A6A6A6; --c-border:#E0E0E0; --c-border-strong:#C4C4C4;
+  --c-bg:#FFF; --c-bg-subtle:#F5F5F5; --c-bg-hover:#EDEDED; --c-on-ink:#FFF;
+  --c-accent:#1A5FB4;            /* 활성 표시 전용 — 디자인 색상 아님 */
+  --font-base:"Pretendard","Noto Sans KR",system-ui,sans-serif;
+  --fs-12:12px; --fs-13:13px; --fs-14:14px; --fs-15:15px; --fs-16:16px;
+  --fs-18:18px; --fs-20:20px; --fs-24:24px; --fs-28:28px; --fs-32:32px;
+  --fw-r:400; --fw-m:500; --fw-b:700;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-full:999px;
+  --sh-sm:0 1px 2px rgba(0,0,0,.06); --sh-md:0 2px 8px rgba(0,0,0,.08);
+  --sh-lg:0 8px 24px rgba(0,0,0,.10);
+  --container:1400px;
+  --header-h:88px;
+  --quick-w:96px;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-base);font-size:var(--fs-16);
+  color:var(--c-text);line-height:1.5;background:var(--c-bg);
+  -webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{color:var(--c-heading);line-height:1.3;margin:0;}
+a{color:var(--c-heading);text-decoration:none;}
+img{max-width:100%;display:block;}
+ul,ol{margin:0;padding:0;list-style:none;}
+button{font-family:inherit;}
+/* 인라인 SVG 아이콘 — js/proto.js 의 ICONS 를 [data-icon] 자리에 주입 */
+.icon{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;}
+.container{width:calc(100% - var(--sp-10));max-width:var(--container);margin:0 auto;}
+.muted{color:var(--c-muted);} .small{font-size:var(--fs-14);}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* ================================================================
+   1. 프로토타입 안내 바 + 해상도 토글
+   - 실서비스에 존재하지 않는 프로토타입 전용 UI
+   ================================================================ */
+.proto-bar{position:sticky;top:0;z-index:9000;background:var(--c-ink);color:#EDEDED;
+  display:flex;align-items:center;gap:var(--sp-4);flex-wrap:wrap;
+  padding:var(--sp-2) var(--sp-5);font-size:var(--fs-13);}
+.proto-bar__left,.proto-bar__right{display:flex;align-items:center;gap:var(--sp-3);}
+.proto-bar__right{margin-left:auto;flex-wrap:wrap;}
+.proto-bar__title{font-weight:var(--fw-b);letter-spacing:.04em;}
+.proto-bar__btn{color:#EDEDED;border:1px solid #5A5A5A;border-radius:var(--r-full);
+  padding:3px 12px;font-size:var(--fs-12);}
+.proto-bar__btn:hover{background:#333;}
+.proto-bar__page{font-weight:var(--fw-m);color:#FFF;}
+.proto-bar__state{border:1px solid #5A5A5A;border-radius:var(--r-sm);padding:1px 8px;font-size:var(--fs-12);}
+.proto-bar__note{color:#A6A6A6;}
+
+/* 해상도 토글 — RFP "CSS 스타일로만 구성" 요건 검증용 */
+.vp-switch{display:flex;align-items:center;gap:6px;}
+.vp-switch__label{color:#A6A6A6;font-size:var(--fs-12);}
+.vp-switch button{background:none;border:1px solid #5A5A5A;color:#EDEDED;
+  border-radius:var(--r-sm);padding:3px 9px;font-size:var(--fs-12);cursor:pointer;}
+.vp-switch button[aria-pressed="true"]{background:#EDEDED;color:var(--c-ink);border-color:#EDEDED;font-weight:var(--fw-b);}
+
+/* 해상도 시뮬레이션 : body 폭을 강제해 미디어쿼리 대신 컨테이너 폭으로 확인
+   ⚠️ 실제 미디어쿼리 검증은 브라우저 개발자도구 기기모드를 병행할 것 */
+body[data-vp]{margin:0 auto;box-shadow:0 0 0 1px var(--c-border);}
+body[data-vp="1024"]{max-width:1024px;}
+body[data-vp="768"]{max-width:768px;}
+body[data-vp="375"]{max-width:375px;}
+
+/* ================================================================
+   2. 유틸바 / 헤더 / GNB 메가드롭다운
+   - 발주처 지정 방식 : 기상청 본청(kma.go.kr) GNB 구조를 이식
+   - 구성 : 유틸바(슬로건·통합검색·사이트맵·Language)
+           + 헤더(로고 · GNB · 보조로고)
+           + 메가패널(좌측 상위메뉴 라벨 + 2Depth 그룹 + 박스형 3Depth + 하이픈 4Depth)
+   - [개발 연동] 활성 상위메뉴는 배경 박스(탭형)로 표시. 패널은 전폭.
+   ================================================================ */
+.utilbar{border-bottom:1px solid var(--c-border);background:var(--c-bg);font-size:var(--fs-13);}
+.utilbar__inner{display:flex;align-items:center;gap:var(--sp-5);height:46px;}
+.utilbar__slogan{color:var(--c-muted);flex:none;}
+.utilbar__gov{flex:1;text-align:center;color:var(--c-muted);font-size:var(--fs-12);}
+.utilbar__right{display:flex;align-items:center;gap:var(--sp-4);flex:none;}
+.utilbar__search{display:flex;align-items:center;gap:var(--sp-2);
+  border:1px solid var(--c-border-strong);border-radius:var(--r-full);padding:5px 6px 5px 14px;}
+.utilbar__search input{border:none;outline:none;font-family:inherit;font-size:var(--fs-13);
+  width:190px;color:var(--c-text);background:none;}
+.utilbar__search button{background:none;border:none;border-left:1px solid var(--c-border);
+  padding:0 4px 0 10px;cursor:pointer;color:var(--c-muted);line-height:1;}
+.utilbar__right a{color:var(--c-text);}
+
+.header{position:relative;background:var(--c-bg);z-index:800;}
+.header__inner{display:flex;align-items:stretch;height:var(--header-h);gap:var(--sp-8);}
+.logo{display:flex;align-items:center;gap:var(--sp-3);flex:none;}
+.logo__mark{width:40px;height:40px;border-radius:50%;border:2px solid var(--c-ink);
+  display:grid;place-items:center;font-size:10px;font-weight:var(--fw-b);color:var(--c-ink);flex:none;}
+.logo__text strong{display:block;font-size:var(--fs-20);color:var(--c-ink);letter-spacing:-.02em;}
+.logo__text span{display:block;font-size:11px;color:var(--c-muted);}
+.header__sub{margin-left:auto;display:flex;align-items:center;gap:var(--sp-3);flex:none;}
+.header__sublogo{border:1px solid var(--c-border-strong);border-radius:var(--r-md);
+  padding:6px 14px;font-size:var(--fs-14);font-weight:var(--fw-b);color:var(--c-heading);}
+.header__all{background:none;border:none;cursor:pointer;padding:6px;display:grid;gap:5px;}
+.header__all span{display:block;width:24px;height:2px;background:var(--c-ink);}
+
+/* GNB — 활성 시 배경 박스(탭형) */
+.gnb{display:flex;align-items:stretch;gap:var(--sp-2);flex:1;justify-content:center;}
+.gnb__item{display:flex;align-items:center;justify-content:center;
+  padding:0 var(--sp-8);font-size:var(--fs-20);font-weight:var(--fw-b);
+  color:var(--c-heading);white-space:nowrap;background:none;border:none;
+  cursor:pointer;position:relative;font-family:inherit;}
+.gnb__item[aria-expanded="true"],.gnb__item[aria-current="page"]{background:var(--c-bg-subtle);}
+/* 패널과 연결되는 하단 인디케이터 */
+.gnb__item[aria-expanded="true"]::after{content:"";position:absolute;left:50%;bottom:0;
+  transform:translateX(-50%);width:56px;height:6px;border-radius:6px 6px 0 0;background:var(--c-ink);}
+
+/* 메가 패널 */
+.megapanel{position:absolute;left:0;right:0;top:100%;background:var(--c-bg);
+  border-top:1px solid var(--c-border-strong);border-bottom:1px solid var(--c-border);
+  box-shadow:var(--sh-md);display:none;overflow:hidden;}
+.megapanel.is-open{display:block;}
+/* 배경 워터마크 — 기상청 방식의 원형 그래픽 자리 */
+.megapanel::before{content:"";position:absolute;left:-90px;top:-40px;width:280px;height:280px;
+  border-radius:50%;background:var(--c-bg-subtle);z-index:0;}
+.megapanel__inner{display:flex;gap:var(--sp-10);padding:var(--sp-8) 0 var(--sp-12);
+  position:relative;z-index:1;}
+/* 좌측 상위메뉴 라벨 */
+.megapanel__label{flex:none;width:170px;font-size:var(--fs-24);font-weight:var(--fw-b);
+  color:var(--c-accent);padding-top:2px;}
+.megapanel__groups{flex:1;display:flex;gap:var(--sp-8);min-width:0;}
+
+/* 2Depth 그룹 — 헤더에 밑줄 */
+.megagroup{min-width:0;display:flex;flex-direction:column;}
+.megagroup--w2{flex:2;} .megagroup--w1{flex:1;}
+.megagroup__head{font-size:var(--fs-20);font-weight:var(--fw-m);color:var(--c-heading);
+  padding-bottom:var(--sp-3);margin-bottom:var(--sp-4);border-bottom:1px solid var(--c-border-strong);}
+.megagroup__head--link:hover{text-decoration:underline;}
+/* 3Depth — 연한 배경 박스, 폭에 따라 자동 다열 */
+.megagroup__list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:var(--sp-2);align-content:start;}
+.megaitem{display:block;background:var(--c-bg-subtle);border-radius:var(--r-sm);
+  padding:11px var(--sp-4);font-size:var(--fs-15);color:var(--c-heading);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.megaitem:hover{background:var(--c-bg-hover);}
+/* 4Depth — 하이픈 리스트, 배경 없음 */
+.megasub{grid-column:1/-1;padding:var(--sp-1) 0 var(--sp-2) var(--sp-4);}
+.megasub li{margin-bottom:6px;}
+.megasub a{font-size:var(--fs-14);color:var(--c-text);}
+.megasub a::before{content:"- ";color:var(--c-muted);}
+.megasub a:hover{color:var(--c-ink);text-decoration:underline;}
+
+/* ================================================================
+   3. 우측 퀵링크 (요구④) — 전 페이지 공통 컴포넌트
+   - 08/04 회신 : 내부 서비스 바로가기 전용. SNS·챗봇 미포함
+   - [개발 연동] Tiles 공통 레이아웃 1곳에 삽입 → 전 페이지 전파
+   ================================================================ */
+.quicklink{position:fixed;right:var(--sp-5);bottom:var(--sp-5);z-index:700;width:var(--quick-w);}
+/* 열기/닫기 토글 — PC 기본 열림 · 태블릿(1024)·모바일 기본 닫힘 (체크리스트 #11·#12) */
+.quicklink__toggle{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;width:100%;border:1px solid var(--c-border-strong);border-radius:var(--r-md);
+  background:var(--c-ink);color:var(--c-on-ink);font-family:inherit;font-size:11px;
+  font-weight:var(--fw-b);padding:var(--sp-2);cursor:pointer;box-shadow:var(--sh-sm);}
+.quicklink__toggle:hover{background:#333;}
+.quicklink__toggle .icon{width:20px;height:20px;}
+.quicklink__toggle-caret{width:14px;height:14px;transition:transform .15s;}
+.quicklink.is-open .quicklink__toggle-caret{transform:rotate(180deg);}
+.quicklink__panel{margin-top:var(--sp-2);}
+.quicklink.is-closed .quicklink__panel{display:none;}
+.quicklink__list{display:flex;flex-direction:column;gap:var(--sp-2);}
+.quicklink__group{display:flex;flex-direction:column;gap:var(--sp-2);}
+.quicklink__item{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;min-height:76px;padding:var(--sp-3) var(--sp-2);
+  border:1px solid var(--c-border-strong);border-radius:var(--r-md);background:var(--c-bg);
+  font-size:var(--fs-12);color:var(--c-text);text-align:center;line-height:1.25;
+  box-shadow:var(--sh-sm);}
+.quicklink__item .icon{width:24px;height:24px;}
+.quicklink__item:hover{background:var(--c-bg-hover);}
+/* 강조 3종 : 색이 아닌 반전·굵기로 위계 표현 */
+.quicklink__item--lead{background:var(--c-ink);color:var(--c-on-ink);
+  border-color:var(--c-ink);font-weight:var(--fw-b);}
+.quicklink__item--lead .icon{stroke-width:2;}
+.quicklink__item--lead:hover{background:#333;}
+.quicklink__group + .quicklink__group{margin-top:var(--sp-3);padding-top:var(--sp-3);
+  border-top:1px dashed var(--c-border-strong);}
+
+/* ================================================================
+   4. 공통 콘텐츠 컴포넌트
+   ================================================================ */
+.section{padding:var(--sp-12) 0;}
+.section--subtle{background:var(--c-bg-subtle);}
+.section__head{display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:var(--sp-6);gap:var(--sp-4);}
+.section__title{font-size:var(--fs-24);font-weight:var(--fw-b);}
+.section__more{font-size:var(--fs-14);color:var(--c-muted);}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);
+  padding:10px 18px;border-radius:var(--r-md);font-size:var(--fs-15);font-weight:var(--fw-m);
+  border:1px solid var(--c-border-strong);cursor:pointer;background:var(--c-bg);color:var(--c-heading);}
+.btn--primary{background:var(--c-ink);color:var(--c-on-ink);border-color:var(--c-ink);}
+.btn--sm{padding:6px 12px;font-size:var(--fs-13);}
+
+.ph{background:repeating-linear-gradient(45deg,#F0F0F0,#F0F0F0 8px,#E8E8E8 8px,#E8E8E8 16px);
+  border:1px solid var(--c-border);display:grid;place-items:center;
+  color:var(--c-muted);font-size:var(--fs-13);text-align:center;padding:var(--sp-4);}
+
+/* 히어로 (요구①) */
+.hero{position:relative;border-bottom:1px solid var(--c-border);overflow:hidden;}
+.hero__stage{position:relative;background:linear-gradient(160deg,#3A3A3A,#6E6E6E 55%,#4A4A4A);
+  display:grid;place-items:center;color:#EDEDED;}
+.hero__label{text-align:center;}
+.hero__label strong{display:block;font-size:var(--fs-20);color:#FFF;margin-bottom:6px;}
+.hero__label span{font-size:var(--fs-13);color:#D0D0D0;}
+.hero__nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--sp-6);pointer-events:none;}
+.hero__nav button{pointer-events:auto;width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.5);background:rgba(0,0,0,.25);color:#FFF;cursor:pointer;}
+.hero__dots{position:absolute;left:50%;transform:translateX(-50%);bottom:var(--sp-5);
+  display:flex;gap:var(--sp-2);}
+.hero__dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);}
+.hero__dots i.is-on{background:#FFF;width:22px;border-radius:var(--r-full);}
+.hero__caption{position:absolute;left:0;right:0;bottom:0;padding:var(--sp-4) var(--sp-6);
+  background:linear-gradient(transparent,rgba(0,0,0,.55));color:#FFF;font-size:var(--fs-14);}
+/* 스크롤 유도 (요구① 보조) */
+.hero__scroll{position:absolute;left:50%;transform:translateX(-50%);bottom:var(--sp-12);
+  color:#FFF;font-size:var(--fs-12);display:flex;flex-direction:column;align-items:center;gap:2px;}
+
+/* 카드뉴스 + 공지사항 */
+.cardnews{border:1px solid var(--c-border);border-radius:var(--r-lg);overflow:hidden;}
+.cardnews .ph{aspect-ratio:4/3;border:none;}
+.cardnews__body{padding:var(--sp-4);}
+.cardnews__body strong{display:block;font-size:var(--fs-18);margin-bottom:6px;}
+
+/* 공지사항 (요구③) : 3열 고정 + 1줄 말줄임 */
+.notice__row{display:grid;grid-template-columns:100px 1fr 100px;align-items:center;
+  gap:var(--sp-3);min-height:52px;border-bottom:1px solid var(--c-border);padding:0 var(--sp-1);}
+.notice__cat{font-size:var(--fs-13);color:var(--c-muted);border:1px solid var(--c-border-strong);
+  border-radius:var(--r-full);padding:2px 0;text-align:center;}
+.notice__title{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  font-size:var(--fs-16);color:var(--c-heading);min-width:0;}
+.notice__date{font-size:var(--fs-13);color:var(--c-muted);text-align:right;}
+
+/* 바로가기 그리드 (요구②) */
+.shortcut{display:grid;gap:var(--sp-3);}
+.shortcut__item{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:var(--sp-2);min-height:118px;border:1px solid var(--c-border-strong);border-radius:var(--r-md);
+  background:var(--c-bg);font-size:var(--fs-14);color:var(--c-text);text-align:center;padding:var(--sp-3);}
+.shortcut__item:hover{background:var(--c-bg-hover);}
+.shortcut__item .icon{width:28px;height:28px;}
+.shortcut__item--lead{background:var(--c-ink);color:var(--c-on-ink);border-color:var(--c-ink);
+  font-size:var(--fs-18);font-weight:var(--fw-b);}
+.shortcut__item--lead .icon{width:38px;height:38px;stroke-width:1.6;}
+
+/* 패밀리사이트 / 푸터 */
+.family{border-top:1px solid var(--c-border);padding:var(--sp-5) 0;}
+.family__inner{display:flex;gap:var(--sp-3);flex-wrap:wrap;}
+.family select{flex:1;min-width:160px;padding:10px 12px;border:1px solid var(--c-border-strong);
+  border-radius:var(--r-sm);font-family:inherit;font-size:var(--fs-14);color:var(--c-text);background:var(--c-bg);}
+.footer{background:var(--c-bg-subtle);border-top:1px solid var(--c-border);padding:var(--sp-8) 0 var(--sp-10);}
+.footer__links{display:flex;gap:var(--sp-5);flex-wrap:wrap;margin-bottom:var(--sp-4);
+  padding-bottom:var(--sp-4);border-bottom:1px solid var(--c-border);}
+.footer__links a{font-size:var(--fs-14);color:var(--c-text);}
+.footer__links a:first-child{font-weight:var(--fw-b);color:var(--c-heading);}
+.footer__body{display:flex;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;
+  font-size:var(--fs-13);color:var(--c-muted);}
+
+/* 서브 페이지 공통 */
+.subhead{background:var(--c-bg-subtle);border-bottom:1px solid var(--c-border);padding:var(--sp-10) 0;}
+.subhead h1{font-size:var(--fs-32);}
+.breadcrumb{display:flex;gap:var(--sp-2);font-size:var(--fs-13);color:var(--c-muted);margin-bottom:var(--sp-3);}
+.subbody{display:grid;grid-template-columns:220px 1fr;gap:var(--sp-10);padding:var(--sp-12) 0;}
+.lnb li a{display:block;padding:12px var(--sp-3);border-bottom:1px solid var(--c-border);font-size:var(--fs-15);}
+.lnb li a[aria-current="page"]{font-weight:var(--fw-b);color:var(--c-ink);background:var(--c-bg-subtle);}
+.tbl{width:100%;border-collapse:collapse;font-size:var(--fs-14);}
+.tbl th,.tbl td{border:1px solid var(--c-border);padding:10px 12px;text-align:left;}
+.tbl th{background:var(--c-bg-subtle);color:var(--c-heading);font-weight:var(--fw-m);white-space:nowrap;}
+.searchform{display:flex;gap:var(--sp-2);flex-wrap:wrap;justify-content:center;
+  background:var(--c-bg-subtle);border:1px solid var(--c-border);border-radius:var(--r-md);padding:var(--sp-4);}
+.searchform select,.searchform input{padding:10px 12px;border:1px solid var(--c-border-strong);
+  border-radius:var(--r-sm);font-family:inherit;font-size:var(--fs-14);}
+.pager{display:flex;justify-content:center;gap:6px;margin-top:var(--sp-8);}
+.pager a{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--c-border);
+  border-radius:var(--r-sm);font-size:var(--fs-14);}
+.pager a[aria-current="page"]{background:var(--c-ink);color:var(--c-on-ink);border-color:var(--c-ink);}
+
+/* ================================================================
+   4-1. 조회형 서브 콘텐츠 템플릿 (우주기상 감시 등 자료조회 화면)
+   - 실제 화면 구조 반영 : 브레드크럼+공유/인쇄 · 2Depth 탭 · 3Depth 탭
+     · UTC/KST + 기간조회 툴바 · 차트 패널 그리드
+   - vnote(요구 검증 포인트)는 08/04 정리 완료로 전 화면 제거됨
+   ================================================================ */
+.crumb2{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-13);color:var(--c-muted);}
+.crumb2 a{color:var(--c-muted);display:inline-flex;align-items:center;gap:4px;}
+.crumb2 a:first-child{color:var(--c-heading);font-weight:var(--fw-m);}
+.crumb2 [aria-current="page"]{color:var(--c-heading);font-weight:var(--fw-m);}
+.crumb2__print{margin-left:auto;background:none;border:none;color:var(--c-muted);cursor:pointer;padding:4px;}
+.crumb2__print:hover{color:var(--c-heading);}
+.sharebar{display:flex;justify-content:flex-end;gap:var(--sp-2);margin:var(--sp-3) 0 var(--sp-6);}
+.sharebar__btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--c-border-strong);
+  background:var(--c-bg);display:grid;place-items:center;font-size:12px;font-weight:var(--fw-b);
+  color:var(--c-text);cursor:pointer;}
+.sharebar__btn:hover{background:var(--c-bg-hover);}
+
+/* 2Depth — 알약형 탭 */
+.tab2{display:flex;gap:var(--sp-2);border-bottom:1px solid var(--c-border);
+  padding-bottom:var(--sp-5);margin-bottom:var(--sp-5);flex-wrap:wrap;}
+.tab2__item{padding:12px var(--sp-6);border:1px solid var(--c-border-strong);border-radius:var(--r-full);
+  font-size:var(--fs-16);font-weight:var(--fw-m);color:var(--c-text);}
+.tab2__item.is-current{background:var(--c-accent);border-color:var(--c-accent);
+  color:var(--c-on-ink);font-weight:var(--fw-b);}
+
+/* 3Depth — 밑줄형 탭 */
+.tab3{display:flex;gap:var(--sp-6);border-bottom:1px solid var(--c-border);margin-bottom:var(--sp-6);}
+.tab3__item{background:none;border:none;border-bottom:2px solid transparent;padding:var(--sp-3) 2px;
+  margin-bottom:-1px;font-family:inherit;font-size:var(--fs-15);color:var(--c-muted);cursor:pointer;}
+.tab3__item.is-current{color:var(--c-accent);font-weight:var(--fw-b);border-color:var(--c-accent);}
+
+/* 관측시각 + 기간조회 툴바 */
+.obs-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
+  gap:var(--sp-4);margin-bottom:var(--sp-6);}
+.obs-toolbar__time{display:flex;gap:var(--sp-4);flex-wrap:wrap;}
+.obs-toolbar__time label{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-13);color:var(--c-muted);}
+.obs-toolbar__time input{border:1px solid var(--c-border-strong);border-radius:var(--r-sm);
+  padding:8px 10px;font-family:inherit;font-size:var(--fs-14);color:var(--c-text);
+  background:var(--c-bg-subtle);width:180px;}
+.obs-toolbar__range{display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;}
+.obs-toolbar__range label{display:flex;align-items:center;gap:6px;font-size:var(--fs-13);color:var(--c-muted);}
+.obs-toolbar__range input{border:1px solid var(--c-border-strong);border-radius:var(--r-sm);
+  padding:8px 10px;font-family:inherit;font-size:var(--fs-14);}
+
+/* 차트 패널 그리드 — 상단 2열 + 하단 1열(좌측 정렬), 실제 화면과 동일 배치 */
+.chartgrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);}
+.chartpanel{border:1px solid var(--c-border);border-radius:var(--r-md);overflow:hidden;}
+.chartpanel__head{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--c-border);
+  font-size:var(--fs-16);font-weight:var(--fw-b);color:var(--c-heading);}
+.chartpanel__body{aspect-ratio:16/9;border:none;line-height:1.7;padding:var(--sp-5);}
+
+/* 검증 메모 — 프로토타입 전용 주석 블록 */
+.vnote{border:1px dashed var(--c-border-strong);border-radius:var(--r-md);
+  background:var(--c-bg-subtle);padding:var(--sp-4);font-size:var(--fs-13);color:var(--c-text);}
+.vnote strong{display:block;color:var(--c-heading);margin-bottom:6px;font-size:var(--fs-14);}
+.vnote ul{list-style:disc;padding-left:18px;}
+.vnote li{margin-bottom:3px;}
+
+/* ================================================================
+   5. 반응형 — 4해상도 (RFP : CSS 스타일로만 구성)
+   ================================================================ */
+@media (max-width:1400px){
+  .container{width:calc(100% - var(--sp-8));}
+  .quicklink{right:var(--sp-3);}
+}
+/* 태블릿 가로 1024 : 우측 고정 유지하되 폭 축소 */
+@media (max-width:1180px){
+  :root{--quick-w:76px;--header-h:76px;}
+  .gnb__item{font-size:var(--fs-18);padding:0 var(--sp-5);}
+  .utilbar__gov{display:none;}
+  .utilbar__search input{width:130px;}
+  .megapanel__inner{gap:var(--sp-6);}
+  .megapanel__label{width:120px;font-size:var(--fs-20);}
+  .megapanel__groups{flex-wrap:wrap;gap:var(--sp-6);}
+  .megagroup--w2,.megagroup--w1{flex:1 1 45%;}
+  .quicklink__item{font-size:11px;}
+}
+/* 태블릿 세로 768 : GNB 접기 + 퀵링크 하단 고정바 전환 */
+@media (max-width:1024px){
+  .gnb,.megapanel,.utilbar__slogan,.utilbar__gov{display:none;}
+  .utilbar__inner{justify-content:flex-end;height:40px;}
+  .header__sub{margin-left:auto;}
+  .subbody{grid-template-columns:1fr;gap:var(--sp-6);}
+  .lnb ul{display:flex;overflow-x:auto;}
+  .lnb li a{border-bottom:none;border-right:1px solid var(--c-border);white-space:nowrap;}
+
+  .tab2{overflow-x:auto;flex-wrap:nowrap;padding-bottom:var(--sp-4);}
+  .tab2__item{white-space:nowrap;padding:10px var(--sp-4);font-size:var(--fs-14);}
+  .tab3{overflow-x:auto;gap:var(--sp-5);}
+  .tab3__item{white-space:nowrap;}
+  .chartgrid{grid-template-columns:1fr;}
+
+  .quicklink{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;
+    background:var(--c-bg);border-top:1px solid var(--c-border-strong);
+    box-shadow:0 -2px 10px rgba(0,0,0,.08);padding:var(--sp-2) var(--sp-3);}
+  /* 닫힘 기본값(≤1024) — 토글 알약 버튼만 노출, 목록은 탭해서 펼침 */
+  .quicklink__toggle{flex-direction:row;width:auto;margin:0 auto;
+    padding:8px var(--sp-5);border-radius:var(--r-full);font-size:var(--fs-13);}
+  .quicklink__panel{margin-top:var(--sp-3);}
+  .quicklink__list{flex-direction:row;overflow-x:auto;gap:var(--sp-2);}
+  .quicklink__item{flex:1 0 auto;min-width:84px;flex-direction:row;justify-content:center;
+    padding:10px var(--sp-3);box-shadow:none;}
+  .quicklink__group{display:flex;gap:var(--sp-2);}
+  .quicklink__group + .quicklink__group{margin-top:0;padding-top:0;border-top:none;
+    margin-left:var(--sp-2);padding-left:var(--sp-2);border-left:1px dashed var(--c-border-strong);}
+  .quicklink__item{min-height:0;}
+  .quicklink__item .icon{width:20px;height:20px;}
+  /* 하단 고정바가 푸터·페이징과 겹치지 않도록 여백 확보 — 체크리스트 #12
+     닫힘(기본)은 토글 바 높이만, 열림은 목록 행까지 포함해 여백을 더 확보 */
+  body{padding-bottom:56px;}
+  body:has(.quicklink.is-open){padding-bottom:120px;}
+}
+/* 모바일 375 */
+@media (max-width:640px){
+  :root{--header-h:60px;}
+  .container{width:calc(100% - var(--sp-5));}
+  .section{padding:var(--sp-8) 0;}
+  .logo__text strong{font-size:var(--fs-16);}
+  .logo__text span{display:none;}
+  .hero__nav{padding:0 var(--sp-3);}
+  .hero__nav button{width:36px;height:36px;}
+  /* 요구③ : 모바일에서 카테고리·날짜를 제목 하단으로 재배치, 제목은 1줄 유지 */
+  .notice__row{grid-template-columns:1fr auto;grid-template-areas:"title title" "cat date";
+    gap:6px var(--sp-2);padding:var(--sp-3) var(--sp-1);}
+  .notice__title{grid-area:title;} .notice__cat{grid-area:cat;width:80px;}
+  .notice__date{grid-area:date;}
+  .quicklink__item{min-width:72px;font-size:11px;flex-direction:column;gap:3px;}
+  .tbl{display:block;overflow-x:auto;white-space:nowrap;}
+  .searchform{flex-direction:column;}
+  .searchform select,.searchform input{width:100%;}
+
+  .sharebar{justify-content:flex-start;}
+  .obs-toolbar{flex-direction:column;align-items:flex-start;}
+  .obs-toolbar__time input{width:100%;}
+  .obs-toolbar__range{width:100%;}
+  .obs-toolbar__range input{flex:1;min-width:0;}
+}

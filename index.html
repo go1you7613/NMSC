@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NMSC 프로토타입 — 화면 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="css/proto.css?v=4">
+<link rel="stylesheet" href="css/index.css?v=2">
+<link rel="stylesheet" href="css/proto-linkmark.css?v=3">
+<script src="js/proto.js?v=4" defer></script>
+</head>
+<body>
+
+<!-- 인덱스는 정적 마크업 (타 화면은 js/proto.js가 주입) -->
+<div class="proto-bar">
+  <div class="proto-bar__left">
+    <span class="proto-bar__title">프로토타입</span>
+    <a class="proto-bar__btn" href="index.html" aria-current="page">화면 인덱스</a>
+  </div>
+  <div class="proto-bar__right">
+    <span class="proto-bar__page">화면 인덱스</span>
+    <span class="proto-bar__note">전체 화면과 설계 근거를 안내하는 페이지입니다.</span>
+  </div>
+</div>
+
+<main class="container idx">
+
+  <header class="idx-head">
+    <p class="idx-eyebrow">NMSC UI/UX PROTOTYPE</p>
+    <h1>국가기상위성센터 누리집 개선 — 국문 메인 프로토타입</h1>
+    <p class="idx-lead">
+      메인페이지 개선 요구 4건에 대한 <strong>구조 설계 검증용</strong> 프로토타입입니다.
+      무채색(그레이스케일)으로 제작해 <strong>레이아웃·정보 구성·반응형 동작</strong>만 검토합니다.<br>
+      색상·타이포 등 톤&amp;매너는 <strong>DSN-01 디자인 시안 2종(08/06 제출)</strong>에서 별도로 다룹니다.
+    </p>
+    <div class="idx-meta">
+      <span><b>화면</b> 4</span>
+      <span><b>기준일</b> 2026-08-04</span>
+      <span><b>근거</b> 03_메인페이지_개선요구사항_분석.md</span>
+      <span><b>대응 해상도</b> 1920 / 1024 / 768 / 375</span>
+    </div>
+  </header>
+
+  <!-- 사용법 -->
+  <section class="idx-sec">
+    <div class="idx-sec__head">
+      <h2>보는 방법</h2>
+      <p>상단 검은 바는 프로토타입 전용 UI로, 실서비스에는 존재하지 않습니다.</p>
+    </div>
+    <p class="linkmark-legend">
+      <span><b>파란 링크 ↗</b> 프로토타입 화면이 있어 이동합니다</span>
+      <span><b style="color:var(--c-muted)">회색 링크</b> 실서비스에는 있으나 프로토타입 화면이 없습니다 (클릭해도 이동 없음)</span>
+    </p>
+    <table class="idx-table">
+      <tbody>
+        <tr><th style="width:180px">해상도 전환</th><td>상단 바 우측 <strong>1920 / 1024 / 768 / 375</strong> 버튼으로 4해상도 동작을 즉시 확인합니다. 실제 미디어쿼리 검증은 브라우저 개발자도구 기기모드를 병행하십시오.</td></tr>
+        <tr><th>GNB 방식</th><td>발주처 지정에 따라 <strong>기상청 본청(kma.go.kr) 구조</strong>를 적용했습니다. 상위메뉴에 마우스를 올리면 전폭 메가패널이 열립니다.</td></tr>
+        <tr><th>빗금 블록</th><td>이미지·차트 등 <strong>영역만 재현</strong>한 자리표시자입니다.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 메인 2안 -->
+  <section class="idx-sec">
+    <div class="idx-sec__head">
+      <h2>국문 메인 — 구조 2안</h2>
+      <p>공통 영역(유틸바·헤더·GNB·퀵링크·푸터)은 동일하고, <strong>히어로 높이 · 바로가기 위계</strong>가 다릅니다.</p>
+    </div>
+    <div class="idx-grid idx-grid--2">
+      <a class="idx-card" href="main-a.html">
+        <span class="idx-tag">1안</span>
+        <strong>실시간 영상 강조형</strong>
+        <p>히어로 <code>min(56vh, 620px)</code> 유지 · 바로가기는 영상뷰어를 <strong>2배 타일</strong>로 분리한 단일 그리드 10종. 위성영상 판독성을 우선하는 방향입니다.</p>
+        <span class="idx-go">1안 보기 <span data-icon="arrow-up-right"></span></span>
+      </a>
+      <a class="idx-card" href="main-b.html">
+        <span class="idx-tag">2안</span>
+        <strong>콘텐츠 접근성 강조형</strong>
+        <p>히어로 <code>min(45vh, 500px)</code>로 축소해 <strong>공지 6건 전체가 첫 화면 진입</strong> · 바로가기를 강조 3 / 일반 8 <strong>2개 밴드로 분리</strong>.</p>
+        <span class="idx-go">2안 보기 <span data-icon="arrow-up-right"></span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 간섭 검증 -->
+  <section class="idx-sec">
+    <div class="idx-sec__head">
+      <h2>퀵링크 전 페이지 적용 — 간섭 검증 <span class="idx-flag">08/04 범위 확대</span></h2>
+      <p>퀵링크가 <strong>전 페이지 공통</strong>으로 확정되어(08/04 회신), 서브페이지에서의 겹침·충돌을 별도 검증합니다. 1안·2안 공통 적용이므로 화면은 1벌입니다.</p>
+    </div>
+    <div class="idx-grid idx-grid--2">
+      <a class="idx-card" href="sub-static.html">
+        <span class="idx-tag">static 19p 대표</span>
+        <strong>서브 페이지 (정적)</strong>
+        <p>차트·표·조회폼·전폭 이미지가 모두 있는 구성. <strong>체크리스트 #10</strong>(본문 우측 겹침) 검증용입니다.</p>
+        <span class="idx-go">서브 정적 보기 <span data-icon="arrow-up-right"></span></span>
+      </a>
+      <a class="idx-card" href="sub-bbs.html">
+        <span class="idx-tag">bbs 11p 대표</span>
+        <strong>게시판 목록</strong>
+        <p>페이징·하단 버튼이 있어 <strong>모바일 하단 고정바 충돌</strong> 리스크가 가장 큰 유형. <strong>체크리스트 #11 · #12</strong> 검증용입니다.</p>
+        <span class="idx-go">게시판 보기 <span data-icon="arrow-up-right"></span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 요구사항 대응 -->
+  <section class="idx-sec">
+    <div class="idx-sec__head">
+      <h2>요구사항 4건 대응</h2>
+      <p>발주처 제공 「메인페이지 개선 시 고려사항」(2026-07-31) 기준.</p>
+    </div>
+    <table class="idx-table">
+      <thead>
+        <tr><th style="width:60px">요구</th><th style="width:230px">내용</th><th>프로토타입 반영</th><th style="width:120px">확인 화면</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>①</td><td>최초 화면에 위성영상만 보임</td>
+          <td>히어로를 vh 기반으로 제어. 1안 620px / 2안 500px — 카드뉴스·공지 상단이 첫 화면에 진입. 섹션 여백 63 → 40px</td>
+          <td><a href="main-a.html">1안</a> · <a href="main-b.html">2안</a></td>
+        </tr>
+        <tr>
+          <td>②</td><td>접속링크와 디자인 부조화 (영상뷰어 강조)</td>
+          <td>1안 2배 타일 / 2안 강조 밴드 분리. 중앙 로고 타일 제거로 슬롯 회수. 색이 아닌 <strong>반전·면적·크기</strong>로 위계 표현</td>
+          <td><a href="main-a.html">1안</a> · <a href="main-b.html">2안</a></td>
+        </tr>
+        <tr>
+          <td>③</td><td>공지사항 2줄 줄바꿈</td>
+          <td>3열 고정(100 / 1fr / 100) + 1줄 말줄임 + 행 높이 균일. 전문은 <code>title</code> 속성 제공. 모바일은 카테고리·날짜를 하단 재배치</td>
+          <td><a href="main-a.html">1안</a> · <a href="main-b.html">2안</a></td>
+        </tr>
+        <tr>
+          <td>④</td><td>우측 직관적 바로가기 링크</td>
+          <td><strong>내부 서비스 바로가기 전용</strong>(08/04 회신). 강조 3 + 일반 3, 2단 위계. <strong>전 페이지 공통</strong> 적용. 태블릿·모바일은 하단 고정바로 전환</td>
+          <td><a href="sub-static.html">서브</a> · <a href="sub-bbs.html">게시판</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 확정·잔여 -->
+  <section class="idx-sec">
+    <div class="idx-sec__head">
+      <h2>확정 사항 및 잔여 확인</h2>
+    </div>
+    <table class="idx-table">
+      <thead><tr><th style="width:110px">구분</th><th style="width:240px">항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>확정 08/04</td><td>퀵링크 항목 구성</td><td>당사 제안값 채택 — 강조(고해상도 영상뷰어 / 위성자료 다운로드 / 특이영상), 일반(오시는 길 / 견학안내 / 우주기상). 추후 변경 가능</td></tr>
+        <tr><td>확정 08/04</td><td>챗봇 · SNS</td><td><strong>미적용</strong>. 참고 예시 이미지의 SNS·챗봇은 해당 기관 구성일 뿐 요구사항이 아니며, 본 과업에서 SNS는 다루지 않음</td></tr>
+        <tr><td>확정 08/04</td><td>적용 범위</td><td><strong>전 페이지 적용</strong> → 공수 <strong>+1.75 M/D</strong> 변경관리 대상 (계약 33 → 34.75 M/D)</td></tr>
+        <tr><td>확정 08/04</td><td>GNB 방식</td><td>기상청 본청 구조 이식 — 유틸바 + 좌측 라벨 + 2Depth 그룹 헤더 + 박스형 3Depth + 하이픈 4Depth</td></tr>
+        <tr><td>확정 08/04</td><td>히어로 노출 높이</td><td><strong>프로토타입 값 확정</strong> — 1안 <code>min(56vh, 620px)</code> / 2안 <code>min(45vh, 500px)</code>. 태블릿·모바일 40~45vh</td></tr>
+        <tr><td>확정 08/04</td><td>바로가기 항목</td><td><strong>현행 10종 그대로 유지</strong>, 배치·위계만 재설계. 중앙 로고 타일은 링크가 아니므로 그리드 슬롯에서 제외</td></tr>
+        <tr><td>확정 08/04</td><td>영문(enhome) 적용</td><td><strong>영문에도 적용하되 항목은 영문 전용 구성.</strong> 국문 항목을 번역하지 않음 — 영문은 국제협력·기술문서 중심이라 이용 목적이 다름. 항목 확정은 IA 화면설계(08/07)</td></tr>
+        <tr><td>잔여 08/11</td><td>개발 협의</td><td>게시판 <code>&lt;td&gt;</code> 마크업 변경(D3) · 차트 리사이즈 핸들러(D5) — 서버사이드·JS 영역</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- IA -->
+  <section class="idx-sec">
+    <div class="idx-sec__head">
+      <h2>적용 IA <span class="idx-flag">소스 추출</span></h2>
+      <p><code>dev/00_meta/preview_targets.csv</code> 의 메뉴경로에서 추출. 상위 5 / 2Depth 12 / 3Depth 32. PLN-02(공통 IA·GNB 화면설계, 08/06~08/07)에서 확정합니다.</p>
+    </div>
+    <table class="idx-table">
+      <thead><tr><th style="width:130px">상위</th><th>2Depth (그룹) · 3Depth</th></tr></thead>
+      <tbody>
+        <tr><td>자료조회</td><td><strong>위성 영상</strong> 위성 영상 / 특별관측 / 특이위성영상 / 고해상도 위성영상 / 국민생활 안전 및 편의<br>
+          <strong>우주기상</strong> 소개 / <a href="sub-static.html">감시</a> / 예·특보 / 우주방사선 정보<br>
+          <strong>북극해빙</strong> 소개 / 면적 / 해빙표면 거칠기<br>
+          <strong>온실가스</strong> 소개 / 감시<br>
+          <strong>폭염 및 가뭄감시</strong> 소개 / 요소 / 영상 분석 / 시계열 분석</td></tr>
+        <tr><td>자료제공</td><td>2Depth 없음 → <strong>헤더 자체가 링크</strong> (기상청 방식의 단일 그룹 패턴)</td></tr>
+        <tr><td>알림·소식</td><td><strong>알림</strong> <a href="sub-bbs.html">공지사항</a> / 보도자료 / 채용공고<br><strong>소식</strong> 위성트위터 / 카드 뉴스 / 센터 행사</td></tr>
+        <tr><td>정보공개</td><td><strong>청렴자료공개</strong> 업무추진비 / 수의계약정보 / 상품권 구매 현황</td></tr>
+        <tr><td>기관소개</td><td><strong>센터소개</strong> 연혁 / 미션·임무 / 소개영상 / 견학안내 / 오시는길<br>
+          <strong>기관장소개(인사말)</strong> — 헤더 링크형<br><strong>주요업무소개</strong> 센터 사무분장</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+</body></html>

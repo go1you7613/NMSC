@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NMSC 프로토타입 — 서브(정적) · 퀵링크 간섭 검증</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="css/proto.css?v=4">
+<link rel="stylesheet" href="css/proto-linkmark.css?v=3">
+<script src="js/proto.js?v=4" defer></script>
+</head>
+<body data-gnb="자료조회" data-proto-note="static 19p 대표 · 우주기상 감시 실제 화면 구조 반영 — 체크리스트 #10 겹침 검증">
+<div id="site-header"></div>
+
+<main>
+  <div class="container" style="padding-top:var(--sp-8)">
+    <nav class="crumb2" aria-label="현재 위치">
+      <a href="main-a.html"><span data-icon="home"></span>Home</a>
+      <span>›</span><a href="#">자료조회</a>
+      <span>›</span><a href="#">우주기상</a>
+      <span>›</span><span aria-current="page">우주기상 감시</span>
+      <button class="crumb2__print" type="button" aria-label="인쇄"><span data-icon="printer"></span></button>
+    </nav>
+    <div class="sharebar">
+      <button type="button" class="sharebar__btn" aria-label="페이스북 공유">f</button>
+      <button type="button" class="sharebar__btn" aria-label="네이버블로그 공유">N</button>
+      <button type="button" class="sharebar__btn" aria-label="X 공유">X</button>
+      <button type="button" class="sharebar__btn" aria-label="링크 복사"><span data-icon="link"></span></button>
+    </div>
+
+    <nav class="tab2" aria-label="우주기상 하위 메뉴">
+      <a class="tab2__item" href="#">우주기상 소개</a>
+      <a class="tab2__item is-current" href="sub-static.html" aria-current="page">우주기상 감시</a>
+      <a class="tab2__item" href="#">우주기상 예·특보</a>
+      <a class="tab2__item" href="#">우주방사선 정보</a>
+    </nav>
+
+    <nav class="tab3" aria-label="우주기상 감시 하위 메뉴">
+      <button class="tab3__item is-current" type="button" aria-current="page">특보상황감시</button>
+      <button class="tab3__item" type="button">KSEM 실황감시</button>
+      <button class="tab3__item" type="button">KSEM 예측자료</button>
+    </nav>
+
+    <div class="obs-toolbar">
+      <div class="obs-toolbar__time">
+        <label>UTC <input type="text" value="2026-08-04 09:32:40" readonly></label>
+        <label>KST <input type="text" value="2026-08-04 18:32:40" readonly></label>
+      </div>
+      <form class="obs-toolbar__range" onsubmit="return false">
+        <label>시작일 <input type="date" value="2026-08-02"></label>
+        <label>종료일 <input type="date" value="2026-08-05"></label>
+        <button class="btn btn--primary btn--sm" type="submit">조회</button>
+      </form>
+    </div>
+
+    <div class="chartgrid" style="margin-bottom:var(--sp-10)">
+      <div class="chartpanel">
+        <div class="chartpanel__head">GOES X-선 플럭스(R)</div>
+        <div class="chartpanel__body ph">라인 차트 — X선 플럭스 시계열(로그축)<br>범례: 0.05–0.40nm · 0.10–0.80nm · Warning Threshold</div>
+      </div>
+      <div class="chartpanel">
+        <div class="chartpanel__head">GOES 양성자 플럭스(S)</div>
+        <div class="chartpanel__body ph">라인 차트 — 양성자 플럭스 시계열(로그축)<br>범례: ≥10MeV · ≥50MeV · ≥100MeV · Warning Threshold</div>
+      </div>
+      <div class="chartpanel">
+        <div class="chartpanel__head">NOAA Kp 지수(G)</div>
+        <div class="chartpanel__body ph">막대 차트 — 3시간 간격 Kp 지수<br>기준선: Threshold(7) · 퀵링크와 겹침 여부 확인 지점</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="site-quicklink"></div>
+<div id="site-footer"></div>
+</body></html>

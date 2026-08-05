@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NMSC 프로토타입 — 게시판 목록 · 퀵링크 간섭 검증</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="css/proto.css?v=4">
+<link rel="stylesheet" href="css/proto-linkmark.css?v=3">
+<script src="js/proto.js?v=4" defer></script>
+</head>
+<body data-gnb="알림·소식" data-proto-note="bbs 11p 대표 — 체크리스트 #11 · #12 검증">
+<div id="site-header"></div>
+
+<main>
+  <div class="subhead">
+    <div class="container">
+      <nav class="breadcrumb"><a href="main-a.html">홈</a><span>›</span><span>알림·소식</span><span>›</span><span>알림</span><span>›</span><span>공지사항</span></nav>
+      <h1>공지사항</h1>
+    </div>
+  </div>
+
+  <div class="container subbody">
+    <nav class="lnb" aria-label="하위메뉴">
+      <ul>
+        <li><a href="#" aria-current="page">공지사항</a></li>
+        <li><a href="#">보도자료</a></li>
+        <li><a href="#">채용공고</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <form class="searchform" style="margin-bottom:var(--sp-6)" onsubmit="return false">
+        <select aria-label="검색 조건"><option>제목+내용</option><option>제목</option><option>작성자</option></select>
+        <input type="search" aria-label="검색어" placeholder="검색어를 입력하세요">
+        <button class="btn btn--primary" type="submit">검색</button>
+      </form>
+
+      <p class="small muted" style="margin-bottom:var(--sp-3)">전체 <strong>128</strong>건 · 1 / 13 페이지</p>
+
+      <table class="tbl">
+        <thead>
+          <tr><th style="width:70px">번호</th><th>제목</th><th style="width:110px">작성자</th><th style="width:110px">작성일</th><th style="width:80px">조회</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>128</td><td>국가기상위성센터 누리집 시스템 정기점검에 따른 서비스 일시 중단 안내</td><td>운영팀</td><td>2026-08-03</td><td>241</td></tr>
+          <tr><td>127</td><td>천리안위성 2A호 산출물 알고리즘 개선 버전 배포 및 적용 일정 안내</td><td>기술팀</td><td>2026-07-30</td><td>512</td></tr>
+          <tr><td>126</td><td>위성자료 다운로드 시스템 접속 방식 변경 안내</td><td>운영팀</td><td>2026-07-22</td><td>388</td></tr>
+          <tr><td>125</td><td>북극해빙 면적 자료 갱신 주기 조정 안내</td><td>분석팀</td><td>2026-07-18</td><td>176</td></tr>
+          <tr><td>124</td><td>2026년 상반기 위성자료 활용 우수사례 공모 결과 발표</td><td>기획팀</td><td>2026-07-15</td><td>623</td></tr>
+          <tr><td>123</td><td>고해상도 영상뷰어 정기 점검 안내</td><td>운영팀</td><td>2026-07-10</td><td>205</td></tr>
+          <tr><td>122</td><td>우주기상 예·특보 서비스 개편 안내</td><td>기술팀</td><td>2026-07-07</td><td>331</td></tr>
+          <tr><td>121</td><td>센터 견학 프로그램 하반기 운영 일정 안내</td><td>기획팀</td><td>2026-07-02</td><td>447</td></tr>
+        </tbody>
+      </table>
+
+      <!-- [개발 연동] 페이징 · 하단 버튼 — 모바일 하단 고정바와 충돌 최다 지점 -->
+      <div style="display:flex;justify-content:flex-end;margin-top:var(--sp-4)">
+        <button class="btn btn--sm" type="button">목록 인쇄</button>
+      </div>
+      <nav class="pager" aria-label="페이지">
+        <a href="#" aria-label="처음">«</a><a href="#" aria-label="이전">‹</a>
+        <a href="#" aria-current="page">1</a><a href="#">2</a><a href="#">3</a>
+        <a href="#">4</a><a href="#">5</a>
+        <a href="#" aria-label="다음">›</a><a href="#" aria-label="마지막">»</a>
+      </nav>
+    </div>
+  </div>
+</main>
+
+<div id="site-quicklink"></div>
+<div id="site-footer"></div>
+</body></html>

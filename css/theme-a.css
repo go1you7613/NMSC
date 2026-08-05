@@ -1,0 +1,33 @@
+/* ================================================================
+   1안 · 실시간 영상 강조형
+   - 히어로 비중 유지(min(56vh,620px)) + 퀵링크로 진입 보완
+   - 바로가기 : 영상뷰어 2배 타일 + 나머지 균등 그리드
+   ================================================================ */
+
+/* 히어로 — 헤더 88 + 유틸 46 + 히어로 620 = 754px
+   FHD(1080) 기준 카드뉴스 제목이 Y≈800에 위치 → 첫 화면 진입 (요구①) */
+.hero__stage{height:min(56vh,620px);}
+
+/* 카드뉴스 + 공지사항 : 좌 카드 / 우 공지 */
+.newsrow{display:grid;grid-template-columns:380px 1fr;gap:var(--sp-8);align-items:start;}
+
+/* 바로가기 : 1순위 2배 타일 + 균등 그리드 (요구②) */
+.shortcut{grid-template-columns:repeat(6,1fr);}
+.shortcut__item--lead{grid-column:span 2;grid-row:span 2;}
+
+@media (max-width:1180px){
+  .hero__stage{height:min(48vh,460px);}
+  .newsrow{grid-template-columns:320px 1fr;gap:var(--sp-6);}
+  .shortcut{grid-template-columns:repeat(4,1fr);}
+}
+@media (max-width:1024px){
+  .hero__stage{height:min(45vh,400px);}
+  .newsrow{grid-template-columns:1fr;}
+  .shortcut{grid-template-columns:repeat(3,1fr);}
+  .shortcut__item--lead{grid-column:span 3;grid-row:auto;min-height:96px;flex-direction:row;}
+}
+@media (max-width:640px){
+  .hero__stage{height:min(40vh,300px);}
+  .shortcut{grid-template-columns:repeat(2,1fr);}
+  .shortcut__item--lead{grid-column:span 2;}
+}
