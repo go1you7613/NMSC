@@ -126,6 +126,7 @@
     "message-circle": '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.8-.9L3 20.5l1.5-4.4A8.4 8.4 0 0 1 3.6 11.5 8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4Z"/>',
     menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
     home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/>',
+    globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/>',
     printer: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
     link: '<path d="M9 17H7a5 5 0 0 1 0-10h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><path d="M8 12h8"/>'
   };
@@ -254,19 +255,6 @@
     }).join("");
 
     host.outerHTML =
-      '<div class="utilbar">' +
-        '<div class="utilbar__inner container">' +
-          '<span class="utilbar__slogan">"하늘을 친구처럼, 국민을 하늘처럼"</span>' +
-          '<span class="utilbar__gov">국민이 주인인 나라, 함께 행복한 대한민국</span>' +
-          '<div class="utilbar__right">' +
-            '<div class="utilbar__search">' +
-              '<input aria-label="통합검색" placeholder="검색어를 입력하세요.">' +
-              '<button type="button" aria-label="검색"><span data-icon="search"></span></button>' +
-            '</div>' +
-            '<a href="#">사이트맵</a><a href="#">Language ▾</a>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
       '<header class="header" data-gnb-root>' +
         '<div class="header__inner container">' +
           '<a class="logo" href="main-a.html">' +
@@ -276,9 +264,11 @@
           '</a>' +
           '<nav class="gnb" aria-label="주메뉴">' + gnbBtns + '</nav>' +
           '<div class="header__sub">' +
-            '<span class="header__sublogo">날씨누리</span>' +
             '<button type="button" class="header__all" aria-label="전체메뉴">' +
               '<span></span><span></span><span></span>' +
+            '</button>' +
+            '<button type="button" class="header__lang" aria-label="언어 선택">' +
+              '<span data-icon="globe"></span>KOR' +
             '</button>' +
           '</div>' +
         '</div>' +
