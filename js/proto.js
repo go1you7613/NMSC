@@ -138,7 +138,8 @@
       if (!body) { node.remove(); return; }   // 정의 없는 아이콘은 빈 자리 남기지 않음
       var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       svg.setAttribute("viewBox", "0 0 24 24");
-      svg.setAttribute("class", "icon");
+      /* 원본 노드에 icon 외 커스텀 클래스(예: quicklink__toggle-caret)가 있으면 함께 보존 */
+      svg.setAttribute("class", ("icon " + node.className).trim());
       svg.setAttribute("aria-hidden", "true");
       svg.innerHTML = body;
       node.replaceWith(svg);
@@ -335,18 +336,19 @@
         }).join("") + '</div>';
     }
 
+    /* 패널을 토글 버튼보다 먼저 배치 — 하단 고정 버튼 위로 목록이 펼쳐지도록 */
     host.outerHTML =
       '<nav class="quicklink" aria-label="바로가기" id="site-quicklink">' +
-        '<button type="button" class="quicklink__toggle" aria-expanded="true" aria-controls="quicklink-panel">' +
-          '<span data-icon="layers"></span>' +
-          '<span class="quicklink__toggle-text">바로가기</span>' +
-          '<span class="quicklink__toggle-caret" data-icon="chevron-down"></span>' +
-        '</button>' +
         '<div class="quicklink__panel" id="quicklink-panel">' +
           '<div class="quicklink__list">' +
             group(QUICK.lead, true) + group(QUICK.normal, false) +
           '</div>' +
         '</div>' +
+        '<button type="button" class="quicklink__toggle" aria-expanded="true" aria-controls="quicklink-panel">' +
+          '<span data-icon="layers"></span>' +
+          '<span class="quicklink__toggle-text">바로가기</span>' +
+          '<span class="quicklink__toggle-caret" data-icon="chevron-down"></span>' +
+        '</button>' +
       '</nav>';
 
     bindQuickToggle();

@@ -162,9 +162,10 @@ body[data-vp="375"]{max-width:375px;}
   font-weight:var(--fw-b);padding:var(--sp-2);cursor:pointer;box-shadow:var(--sh-sm);}
 .quicklink__toggle:hover{background:#333;}
 .quicklink__toggle .icon{width:20px;height:20px;}
-.quicklink__toggle-caret{width:14px;height:14px;transition:transform .15s;}
-.quicklink.is-open .quicklink__toggle-caret{transform:rotate(180deg);}
-.quicklink__panel{margin-top:var(--sp-2);}
+/* 닫힘 = 위쪽 화살표(펼치면 위로 열림) · 열림 = 아래쪽 화살표(누르면 접힘) */
+.quicklink__toggle-caret{width:14px;height:14px;transition:transform .15s;transform:rotate(180deg);}
+.quicklink.is-open .quicklink__toggle-caret{transform:rotate(0deg);}
+.quicklink__panel{margin-bottom:var(--sp-2);}
 .quicklink.is-closed .quicklink__panel{display:none;}
 .quicklink__list{display:flex;flex-direction:column;gap:var(--sp-2);}
 .quicklink__group{display:flex;flex-direction:column;gap:var(--sp-2);}
@@ -381,7 +382,7 @@ body[data-vp="375"]{max-width:375px;}
   /* 닫힘 기본값(≤1024) — 토글 알약 버튼만 노출, 목록은 탭해서 펼침 */
   .quicklink__toggle{flex-direction:row;width:auto;margin:0 auto;
     padding:8px var(--sp-5);border-radius:var(--r-full);font-size:var(--fs-13);}
-  .quicklink__panel{margin-top:var(--sp-3);}
+  .quicklink__panel{margin-bottom:var(--sp-3);}
   .quicklink__list{flex-direction:row;overflow-x:auto;gap:var(--sp-2);}
   .quicklink__item{flex:1 0 auto;min-width:84px;flex-direction:row;justify-content:center;
     padding:10px var(--sp-3);box-shadow:none;}
