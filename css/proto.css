@@ -308,6 +308,70 @@ body.no-scroll{overflow:hidden;}
 .pager a[aria-current="page"]{background:var(--c-ink);color:var(--c-on-ink);border-color:var(--c-ink);}
 
 /* ================================================================
+   3-1. 게시판 3형 전환 (PLN-03) — 동일 마크업 + data-view 토글
+   - R5 검증 : 목록형/카드형/갤러리형 모두 .bbslist__item 마크업 재사용,
+     CSS만으로 레이아웃 전환 (서버사이드 마크업 변경 불필요)
+   ================================================================ */
+.bbslist__meta{display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:var(--sp-3);margin-bottom:var(--sp-3);}
+.viewswitch{display:flex;gap:6px;}
+.viewswitch__btn{display:flex;align-items:center;gap:6px;padding:7px 12px;
+  border:1px solid var(--c-border-strong);border-radius:var(--r-sm);background:var(--c-bg);
+  font-family:inherit;font-size:var(--fs-13);color:var(--c-text);cursor:pointer;}
+.viewswitch__btn .icon{width:16px;height:16px;}
+.viewswitch__btn[aria-pressed="true"]{background:var(--c-ink);color:var(--c-on-ink);border-color:var(--c-ink);}
+
+/* 공통 : 헤더 행은 목록형에서만 노출 */
+.bbslist__head{display:grid;grid-template-columns:70px 1fr 110px 110px 80px;gap:var(--sp-3);
+  padding:0 var(--sp-2) var(--sp-2);border-bottom:1px solid var(--c-border-strong);
+  font-size:var(--fs-13);color:var(--c-muted);font-weight:var(--fw-m);}
+.bbslist[data-view="card"] .bbslist__head,
+.bbslist[data-view="gallery"] .bbslist__head{display:none;}
+
+/* 목록형 (기본) — 표 형태, 썸네일 숨김 */
+.bbslist__items{display:flex;flex-direction:column;}
+.bbslist__item{display:grid;grid-template-columns:70px 1fr 110px 110px 80px;align-items:center;
+  gap:var(--sp-3);padding:12px var(--sp-2);border-bottom:1px solid var(--c-border);}
+.bbslist__thumb{display:none;}
+.bbslist__no{font-size:var(--fs-14);color:var(--c-muted);}
+.bbslist__title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:var(--fs-16);color:var(--c-heading);min-width:0;}
+.bbslist__writer,.bbslist__date{font-size:var(--fs-14);color:var(--c-muted);}
+.bbslist__views{font-size:var(--fs-14);color:var(--c-muted);}
+
+/* 카드형 — 썸네일 + 제목 + 메타 세로 카드, auto-fill 그리드 */
+.bbslist[data-view="card"] .bbslist__items{display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--sp-4);}
+.bbslist[data-view="card"] .bbslist__item{display:flex;flex-direction:column;
+  grid-template-columns:none;border:1px solid var(--c-border);border-radius:var(--r-lg);
+  overflow:hidden;padding:0;gap:0;}
+.bbslist[data-view="card"] .bbslist__thumb{display:grid;aspect-ratio:4/3;}
+.bbslist[data-view="card"] .bbslist__no{display:none;}
+.bbslist[data-view="card"] .bbslist__title{display:block;white-space:normal;
+  padding:var(--sp-3) var(--sp-3) 6px;font-weight:var(--fw-b);}
+.bbslist[data-view="card"] .bbslist__writer,
+.bbslist[data-view="card"] .bbslist__date,
+.bbslist[data-view="card"] .bbslist__views{display:block;padding:0 var(--sp-3);
+  font-size:var(--fs-13);color:var(--c-muted);}
+.bbslist[data-view="card"] .bbslist__views{padding-bottom:var(--sp-3);}
+
+/* 갤러리형 — 이미지 중심, 제목은 하단 그라디언트 캡션 오버레이 */
+.bbslist[data-view="gallery"] .bbslist__items{display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--sp-3);}
+.bbslist[data-view="gallery"] .bbslist__item{position:relative;display:block;
+  grid-template-columns:none;border-radius:var(--r-md);overflow:hidden;padding:0;}
+.bbslist[data-view="gallery"] .bbslist__thumb{display:grid;aspect-ratio:1/1;}
+.bbslist[data-view="gallery"] .bbslist__no,
+.bbslist[data-view="gallery"] .bbslist__writer,
+.bbslist[data-view="gallery"] .bbslist__views{display:none;}
+.bbslist[data-view="gallery"] .bbslist__title{position:absolute;left:0;right:0;bottom:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  white-space:normal;padding:var(--sp-3);background:linear-gradient(transparent,rgba(0,0,0,.65));
+  color:#FFF;font-size:var(--fs-13);}
+.bbslist[data-view="gallery"] .bbslist__date{position:absolute;top:var(--sp-2);right:var(--sp-2);
+  background:rgba(255,255,255,.92);padding:2px 8px;border-radius:var(--r-full);font-size:11px;color:var(--c-text);}
+
+/* ================================================================
    4-1. 조회형 서브 콘텐츠 템플릿 (우주기상 감시 등 자료조회 화면)
    - 실제 화면 구조 반영 : 브레드크럼+공유/인쇄 · 2Depth 탭 · 3Depth 탭
      · UTC/KST + 기간조회 툴바 · 차트 패널 그리드
@@ -441,4 +505,13 @@ body.no-scroll{overflow:hidden;}
   .obs-toolbar__time input{width:100%;}
   .obs-toolbar__range{width:100%;}
   .obs-toolbar__range input{flex:1;min-width:0;}
+
+  /* 게시판 목록형 : 번호·조회 열 숨기고 제목+작성일 중심으로 재배치 */
+  .bbslist__meta{align-items:flex-start;}
+  .bbslist__head{grid-template-columns:1fr 90px;}
+  .bbslist__head span:nth-child(1),.bbslist__head span:nth-child(3),.bbslist__head span:nth-child(5){display:none;}
+  .bbslist__item{grid-template-columns:1fr 90px;padding:var(--sp-3) var(--sp-1);}
+  .bbslist__no,.bbslist__writer,.bbslist__views{display:none;}
+  .bbslist[data-view="card"] .bbslist__items,
+  .bbslist[data-view="gallery"] .bbslist__items{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
 }
