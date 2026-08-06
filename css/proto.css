@@ -87,7 +87,11 @@ body[data-vp="375"]{max-width:375px;}
 .logo__text span{display:block;font-size:11px;color:var(--c-muted);}
 .header__sub{margin-left:auto;display:flex;align-items:center;gap:var(--sp-3);flex:none;}
 .header__all{background:none;border:none;cursor:pointer;padding:6px;display:grid;gap:5px;}
-.header__all span{display:block;width:24px;height:2px;background:var(--c-ink);}
+.header__all span{display:block;width:24px;height:2px;background:var(--c-ink);
+  transition:transform .15s,opacity .15s;}
+.header__all[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.header__all[aria-expanded="true"] span:nth-child(2){opacity:0;}
+.header__all[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 .header__lang{display:flex;align-items:center;gap:6px;border:1px solid var(--c-border-strong);
   border-radius:var(--r-full);padding:7px 14px;font-family:inherit;font-size:var(--fs-13);
   font-weight:var(--fw-m);color:var(--c-heading);background:var(--c-bg);cursor:pointer;}
@@ -139,6 +143,35 @@ body[data-vp="375"]{max-width:375px;}
 .megasub a{font-size:var(--fs-14);color:var(--c-text);}
 .megasub a::before{content:"- ";color:var(--c-muted);}
 .megasub a:hover{color:var(--c-ink);text-decoration:underline;}
+
+/* ================================================================
+   2-1. 전체메뉴 오프캔버스 (PLN-02 : 모바일 GNB 대응)
+   - GNB 호버 드롭다운이 없는 ≤1024 해상도의 유일한 IA 진입 경로
+   - 헤더 우측 "전체메뉴" 버튼으로 전 해상도 공통 진입
+   ================================================================ */
+body.no-scroll{overflow:hidden;}
+.mobilenav{position:fixed;inset:0;z-index:9100;background:var(--c-bg);display:none;overflow-y:auto;}
+.mobilenav.is-open{display:block;}
+.mobilenav__head{position:sticky;top:0;background:var(--c-bg);z-index:1;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:var(--sp-4) var(--sp-5);border-bottom:1px solid var(--c-border);}
+.mobilenav__title{font-size:var(--fs-18);font-weight:var(--fw-b);color:var(--c-heading);}
+.mobilenav__close{background:none;border:none;cursor:pointer;padding:6px;color:var(--c-heading);}
+.mobilenav__close .icon{width:22px;height:22px;}
+.mobilenav__body{padding:0 var(--sp-5) var(--sp-10);max-width:640px;margin:0 auto;}
+.mobilenav__top{border-bottom:1px solid var(--c-border);}
+.mobilenav__top summary{list-style:none;cursor:pointer;padding:var(--sp-4) 0;
+  font-size:var(--fs-20);font-weight:var(--fw-b);color:var(--c-heading);
+  display:flex;align-items:center;justify-content:space-between;}
+.mobilenav__top summary::-webkit-details-marker{display:none;}
+.mobilenav__top summary::after{content:"+";color:var(--c-muted);font-weight:var(--fw-r);font-size:var(--fs-20);}
+.mobilenav__top[open] summary::after{content:"−";}
+.mobilenav__groups{display:flex;flex-direction:column;gap:var(--sp-5);padding:0 0 var(--sp-5);}
+.mobilenav__grouphead{font-size:var(--fs-14);font-weight:var(--fw-b);color:var(--c-muted);margin:0 0 var(--sp-2);}
+.mobilenav__grouphead--link{display:block;color:var(--c-heading);}
+.mobilenav__list li a{display:block;padding:9px 0;font-size:var(--fs-16);color:var(--c-text);}
+.mobilenav__sub{padding-left:var(--sp-3);}
+.mobilenav__sub li a{padding:6px 0;font-size:var(--fs-14);color:var(--c-muted);}
 
 /* ================================================================
    3. 우측 퀵링크 (요구④) — 전 페이지 공통 컴포넌트

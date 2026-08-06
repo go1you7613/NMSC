@@ -127,6 +127,7 @@
     menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
     home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/>',
     globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/>',
+    x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
     printer: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
     link: '<path d="M9 17H7a5 5 0 0 1 0-10h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><path d="M8 12h8"/>'
   };
@@ -306,6 +307,73 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
   }
 
+  /* ---------------- 전체메뉴 (PLN-02 : 모바일 GNB 대응) ----------------
+     GNB 호버 드롭다운은 ≤1024에서 숨겨지므로, 헤더 우측 "전체메뉴" 버튼이
+     모바일·태블릿의 유일한 IA 진입 경로가 된다. 전 해상도 공통으로 동작. */
+  function mobileGroupHtml(g) {
+    var headHtml = g.items.length
+      ? '<p class="mobilenav__grouphead">' + esc(g.name) + '</p>'
+      : '<a class="mobilenav__grouphead mobilenav__grouphead--link" href="#">' + esc(g.name) + '</a>';
+    var items = g.items.map(function (it) {
+      var sub = it[1] && it[1].length
+        ? '<ul class="mobilenav__sub">' + it[1].map(function (s) {
+            return '<li><a href="#">' + esc(s) + '</a></li>';
+          }).join("") + '</ul>'
+        : "";
+      return '<li><a href="' + (it[2] || "#") + '">' + esc(it[0]) + '</a></li>' + sub;
+    }).join("");
+    return '<div class="mobilenav__group">' + headHtml +
+           (items ? '<ul class="mobilenav__list">' + items + '</ul>' : '') + '</div>';
+  }
+
+  function renderMobileNav() {
+    var tops = IA.map(function (m) {
+      return '<details class="mobilenav__top">' +
+        '<summary>' + esc(m[0]) + '</summary>' +
+        '<div class="mobilenav__groups">' + m[1].map(mobileGroupHtml).join("") + '</div>' +
+      '</details>';
+    }).join("");
+
+    var nav = el(
+      '<div class="mobilenav" id="mobilenav" aria-hidden="true">' +
+        '<div class="mobilenav__head">' +
+          '<span class="mobilenav__title">전체메뉴</span>' +
+          '<button type="button" class="mobilenav__close" aria-label="닫기"><span data-icon="x"></span></button>' +
+        '</div>' +
+        '<nav class="mobilenav__body" aria-label="전체메뉴">' + tops + '</nav>' +
+      '</div>'
+    );
+    document.body.appendChild(nav);
+    bindMobileNav(nav);
+  }
+
+  function bindMobileNav(nav) {
+    var openBtn = document.querySelector(".header__all");
+    var closeBtn = nav.querySelector(".mobilenav__close");
+    if (!openBtn) return;
+
+    function open() {
+      nav.classList.add("is-open");
+      nav.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.classList.add("no-scroll");
+    }
+    function close() {
+      nav.classList.remove("is-open");
+      nav.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("no-scroll");
+    }
+
+    openBtn.setAttribute("aria-expanded", "false");
+    openBtn.setAttribute("aria-controls", "mobilenav");
+    openBtn.addEventListener("click", function () {
+      nav.classList.contains("is-open") ? close() : open();
+    });
+    closeBtn.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  }
+
   /* ---------------- 우측 퀵링크 (요구④) ----------------
      08/04 회신 : 내부 서비스 바로가기 전용. SNS·챗봇 미포함.
      [개발 연동] Tiles 공통 레이아웃 1곳에 삽입 → 전 페이지 전파.
@@ -396,6 +464,7 @@
     renderHeader();
     renderQuick();
     renderFooter();
+    renderMobileNav();
     paintIcons();          // 주입이 모두 끝난 뒤 한 번에 아이콘 치환
     markLinks();           // 링크 유효성 표시 (proto-linkmark.css)
   }
